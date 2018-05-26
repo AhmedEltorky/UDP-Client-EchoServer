@@ -22,12 +22,15 @@ public class Client {
 
             DatagramPacket request = new DatagramPacket(message, message.length, aHost, serverPort);
             aSocket.send(request);
+            aSocket.setSoTimeout(1000);
 
             byte[] buffer = new byte[1000];
             DatagramPacket replay = new DatagramPacket(buffer, buffer.length);
             aSocket.receive(replay);
 
             System.out.println("replay: " + new String(replay.getData()));
+        } catch (SocketTimeoutException ex) {
+            System.out.println("connection lost !!!!");
         } catch (SocketException ex) {
             System.out.println(ex.toString());
         } catch (UnknownHostException ex) {
